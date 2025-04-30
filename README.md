@@ -1,6 +1,8 @@
 # Linux-IPC-Shared-memory
 Ex06-Linux IPC-Shared-memory
 
+
+
 # AIM:
 To Write a C program that illustrates two processes communicating using shared memory.
 
@@ -21,12 +23,44 @@ Execute the C Program for the desired output.
 # PROGRAM:
 
 ## Write a C program that illustrates two processes communicating using shared memory.
+```
 
+#include <stdio.h>
+#include <sys/ipc.h>
+#include <sys/shm.h>
 
+int main()
+{
+	// Generate a unique key using ftok
+	key_t key = ftok("shmfile", 65);
 
+	// Get an identifier for the shared memory segment using shmget
+	int shmid = shmget(key, 1024, 0666 | IPC_CREAT);
+      printf("Shared memory id = %d \n",shmid);
+// Attach to the shared memory segment using shmat
+	char* str = (char*)shmat(shmid, (void*)0, 0);
+	
+    printf("Write Data : ");
+	fgets(str, 1024, stdin);
+
+	printf("Data written in memory: %s\n", str);
+
+	// Detach from the shared memory segment using shmdt
+	shmdt(str);
+
+	return 0;
+}
+
+````
 
 
 ## OUTPUT
+
+![image](https://github.com/user-attachments/assets/58318b8b-3898-43b3-8ea2-c21b59c1ceac)
+
+## OUTPUT
+![image](https://github.com/user-attachments/assets/62f6c7eb-a4db-473b-8121-44dc902041bd)
+
 
 
 # RESULT:
